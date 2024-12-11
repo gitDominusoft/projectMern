@@ -3,6 +3,8 @@ let mongoose = require("mongoose");
 let cors = require("cors");
 const session = require("express-session");
 let routeContact = require("./routes/routeContact");
+let routeItem = require("./routes/routeItem");
+let path = require("path");
 let app = express();
 app.use(
   cors({
@@ -21,6 +23,7 @@ app.use(
 );
 // Duhet kjo qe te ruhen informacionet ne databaze
 app.use(express.json({ limit: "1000mb", extended: true }));
+app.use("/images", express.static(path.join(__dirname, "/images")));
 mongoose
   .connect(
     "mongodb+srv://git:git@cluster0.h9uun.mongodb.net/ProjectMERN?retryWrites=true&w=majority&appName=Cluster0"
@@ -29,6 +32,7 @@ mongoose
   .catch((err) => console.log("Error: " + err));
 
 app.use(routeContact);
+app.use(routeItem);
 app.use("/", (req, res) => {
   res.send("Hello");
 });
